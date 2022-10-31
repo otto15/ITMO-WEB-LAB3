@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="main.css"/>
+    <title>LAB3</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="src/js/init.js"></script>
+    <script src="src/js/click.js"></script>
+    <script src="src/js/limiter.js"></script>
+    <script src="src/js/cleaner.js"></script>
+</h:head>
+
+<body onload="init()">
+<header>
+    <div class="corner author-info">
+        <p>Rakhmatullin Ramazan</p>
+        <p>P32131</p>
+    </div>
+    <div class="project-name">
+        <h1>Laboratory work #3</h1>
+    </div>
+    <div class="corner variant">
+        <h:link outcome="jumpToMain">
+            Стартовая страница
+        </h:link>
+
+        <p>Variant: 13110</p>
+    </div>
+</header>
+<div class="wrapper">
+    <div class="wrap-content">
+        <div class="sender">
+            <h:panelGroup layout="block" id="graphicus" class="in-sender graph">
+                <ui:include src="graph.xhtml"/>
+            </h:panelGroup>
+            <div class="in-sender form-box">
+                <h:form id="form">
+                    <div id="values x_div">
+                        <h:inputHidden required="true" requiredMessage="Не введена координата X!" type="hidden" name="x"
+                                       id="x_value" value="#{hitCheck.x}"/>
+                        <div class="value-title">
+                            <p>Enter X:</p>
+                        </div>
+                        <div class="buttons x-buttons"></div>
+                        <div class="validation-info x-validation-info">
+                            <h:message for="x_value" id="xerrmsg"/>
+                        </div>
+                    </div>
+                    <div id="values y_div">
+                        <label for="y_value">
+                            <div class="value-title">
+                                <p>Enter Y:</p>
+                            </div>
+                            <div class="y">
+                                <h:inputText required="true" requiredMessage="Не выбрана координата Y!" type="text"
+                                             name="y" id="y_value" value="#{hitCheck.y}">
+                                    <f:validator validatorId="yValueValidator"/>
+                                </h:inputText>
+                            </div>
+                            <div class="validation-info y-validation-info">
+                                <h:message for="y_value" id="yerrmsg"/>
+                            </div>
+                        </label>
+                    </div>
+                    <div id="values r_div">
+                        <div class="value-title">
+                            <p>Enter R:</p>
+                        </div>
+                        <h:inputHidden required="true" requiredMessage="Не введена координата R!" type="hidden" name="r"
+                                       id="r_value" value="#{hitCheck.r}"/>
+                        <div class="buttons r-buttons">
+                            <ui:repeat begin="1" end="5" varStatus="iterator">
+                                <h:commandButton styleClass="r-size" value="#{iterator.index + 1}" action="#{table.changeR(iterator.index + 1)}">
+                                    <f:passThroughAttribute name="target" value="form:r_value"/>
+                                    <f:ajax execute="r_value" render="graphicus"/>
+                                </h:commandButton>
+                            </ui:repeat>
+                        </div>
+                        <div class="validation-info r-validation-info">
+                            <h:message for="r_value" id="rerrmsg"/>
+                        </div>
+                    </div>
+                    <div class="managing-buttons">
+                        <h:commandButton id="submit" value="Проверить" action="#{hitCheck.saveToTable()}">
+                            <f:ajax execute="r_value y_value x_value" render="check_table graphicus rerrmsg xerrmsg yerrmsg"/>
+                        </h:commandButton>
+                        <input id="reset" type="reset" value="Сбросить" onclick="clean_input()"/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+        <div class="table-box">
+            <div class="clean-button">
+                <h:commandButton type="button" value="Очистить таблицу" action="#{table.clear()}"
+                                 onclick="clean_input()">
+                    <f:ajax render="check_table"/>
+                </h:commandButton>
+            </div>
+            <div class="info-table">
+                <h:dataTable id="check_table" value="#{table.getAllRows()}" var="hitCheck">
+                    <h:column>
+                        <f:facet name="header">X</f:facet>
+                        #{hitCheck.x}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Y</f:facet>
+                        #{hitCheck.y}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">R</f:facet>
+                        #{hitCheck.r}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Текущее время</f:facet>
+                        <h:outputText value="#{hitCheck.callingDate}">
+                            <f:convertDateTime type="zonedDateTime" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        </h:outputText>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Время выполнения</f:facet>
+                        #{hitCheck.executionTime}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Результат</f:facet>
+                        #{hitCheck.inArea}
+                    </h:column>
+                </h:dataTable>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

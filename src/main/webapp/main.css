@@ -1,0 +1,239 @@
+body {
+    font-family: monospace;
+    font-size: 1.0rem;
+}
+
+header {
+    padding: 15px 25px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.corner {
+    width: 220px;
+}
+
+.project-name {
+    text-align: center;
+}
+
+.variant {
+    text-align: right;
+}
+
+
+.time-wrapper {
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+}
+
+input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+.selected {
+    color: #d8d8d8;
+    background-color: black;
+}
+
+.validation-info {
+    display: flex;
+    justify-content: center;
+    color: red;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.wrap-content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.wrap-content .sender .in-sender {
+    display: flex;
+    justify-content: center;
+}
+
+.graph {
+    border: 2px solid #141414;
+    border-radius: 15px;
+    background-color: #f1f1f1;
+    margin-bottom: 10px;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+svg circle {
+    stroke: black;
+}
+
+svg .green {
+    fill: #569E76;
+}
+
+svg .red {
+    fill: #B15E79;
+}
+
+.graph svg{
+    stroke: rgba(0, 0, 0, 0.92);
+    fill: #5f4dc7;
+    font-size: 0.8rem;
+}
+
+#y_div {
+    display: flex;
+    justify-content: center;
+}
+
+#form {
+    width: 400px;
+    height: 270px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.values {
+    display: flex;
+    flex-direction: column;
+}
+
+.y {
+    display: flex;
+    justify-content: center;
+}
+
+.y input {
+    width: 350px;
+}
+
+.value-title {
+    display: flex;
+    justify-content: center;
+}
+
+p {
+    margin: 0 0 10px;
+    padding: 0;
+}
+
+.buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.buttons input {
+    height: 25px;
+}
+
+.y input {
+    border-radius: 8px;
+    height: 30px;
+}
+
+.r-buttons input {
+    width: 70px;
+    border-radius: 8px;
+}
+
+.x-buttons input {
+    width: 40px;
+    border-radius: 8px;
+}
+
+
+#form .managing-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.managing-buttons input {
+    width: 150px;
+    height: 30px;
+    border-radius: 8px;
+}
+
+.managing-buttons button {
+    width: 150px;
+    height: 30px;
+    border-radius: 8px;
+}
+
+.table-header {
+    background-color: #f1f1f1;
+}
+
+.info-table > table > tr {
+    padding: 5px;
+}
+
+.wrap-content > div {
+    width: 600px;
+}
+
+.clean-button {
+    display: flex;
+    justify-content: center;
+}
+
+.clean-button input {
+    border-radius: 8px;
+    height: 30px;
+}
+
+.info-table {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.info-table table {
+    width: 100%;
+    border: none;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+.info-table table thead th {
+    font-weight: bold;
+    text-align: left;
+    border: none;
+    padding: 10px 15px;
+    background: #d8d8d8;
+    font-size: 14px;
+}
+.info-table table thead tr th:first-child {
+    border-radius: 8px 0 0 8px;
+}
+.info-table table thead tr th:last-child {
+    border-radius: 0 8px 8px 0;
+}
+.info-table table tbody td {
+    text-align: left;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    vertical-align: top;
+}
+.info-table table tbody tr:nth-child(even){
+    background: #f3f3f3;
+}
+.info-table table tbody tr td:first-child {
+    border-radius: 8px 0 0 8px;
+}
+.info-table table tbody tr td:last-child {
+    border-radius: 0 8px 8px 0;
+}
