@@ -8,7 +8,7 @@ const circles = {};
 const xRange = range(-5, 4);
 
 function init() {
-    $('[id="form:timezone"]').val(Intl.DateTimeFormat().resolvedOptions().timeZone);
+    setTimezone();
     printBtns(xRange, ".x-buttons", "x-dot", "form:x_value");
     chooseFirstRadius();
     $('.r-size').on("click", btnClick);
@@ -49,3 +49,6 @@ function chooseFirstRadius() {
     r_button.click();
 }
 
+function setTimezone() {
+    $('[id="form:timezone"]').val(Intl.DateTimeFormat().resolvedOptions().timeZone);
+}

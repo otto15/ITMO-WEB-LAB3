@@ -6,7 +6,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 @ManagedBean

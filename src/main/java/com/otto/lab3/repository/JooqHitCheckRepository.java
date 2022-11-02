@@ -45,7 +45,6 @@ public class JooqHitCheckRepository implements HitCheckRepository {
             hitChecksRecord.setR(hitCheck.getR());
             hitChecksRecord.setHitStatus(hitCheck.isInArea());
             hitChecksRecord.setExecutionTime(hitCheck.getExecutionTime());
-            hitChecksRecord.setTimezone(hitCheck.getTimezone());
             hitChecksRecord.setCallingDate(hitCheck.getCallingDate().atOffset(ZoneOffset.UTC));
             hitChecksRecord.setSessionId(getSessionId());
 
@@ -85,7 +84,6 @@ public class JooqHitCheckRepository implements HitCheckRepository {
                 hitCheck.setR(record.getValue(HIT_CHECKS.R));
                 hitCheck.setCallingDate(record.getValue(HIT_CHECKS.CALLING_DATE).toInstant());
                 hitCheck.setExecutionTime(record.getValue(HIT_CHECKS.EXECUTION_TIME));
-                hitCheck.setTimezone(record.getValue(HIT_CHECKS.TIMEZONE));
                 hitCheck.setInArea(record.getValue(HIT_CHECKS.HIT_STATUS));
 
                 hitChecks.add(hitCheck);
@@ -102,7 +100,6 @@ public class JooqHitCheckRepository implements HitCheckRepository {
 
         FacesContext fCtx = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) fCtx.getExternalContext().getSession(false);
-
         return session.getId();
     }
 }

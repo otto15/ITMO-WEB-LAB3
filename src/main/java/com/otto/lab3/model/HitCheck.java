@@ -7,6 +7,7 @@ import lombok.Data;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -37,13 +38,25 @@ public class HitCheck implements Serializable {
 
     public void saveToTable() {
         inArea = checker.checkIfInArea(this);
-        executionTime = System.nanoTime() - callingDate.getNano();
+        executionTime = System.currentTimeMillis() - callingDate.toEpochMilli();
+        saveTimezone(timezone);
         if (hitCheckRepository.save(this)) {
             table.getHitChecks().add(this);
         }
     }
 
     public ZonedDateTime getCallingDateWithTimeZone() {
-        return callingDate.atZone(ZoneId.of(timezone));
+        return callingDate.atZone(ZoneId.of(getSessionTimezone()));
+    }
+
+    public void saveTimezone(String timezone) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().put("timezone", timezone);
+    }
+
+    public String getSessionTimezone() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().putIfAbsent("timezone", "Europe/London");
+        return (String) context.getExternalContext().getSessionMap().get("timezone");
     }
 }

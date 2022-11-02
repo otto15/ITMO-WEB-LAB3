@@ -7,6 +7,5 @@ CREATE TABLE IF NOT EXISTS s335109.hit_checks (
     calling_date TIMESTAMP WITH TIME ZONE NOT NULL,
     execution_time BIGINT NOT NULL,
     hit_status BOOLEAN NOT NULL,
-    timezone VARCHAR NOT NULL,
     PRIMARY KEY (id)
 );

@@ -45,7 +45,7 @@
                 <h:form id="form">
                     <div id="values x_div">
                         <h:inputHidden required="true" requiredMessage="Не введена координата X!" type="hidden" name="x"
-                                       id="x_value" value="#{hitCheck.x}"/>
+                                       id="x_value" value="#{hitCheck.x = 1}"/>
                         <div class="value-title">
                             <p>Enter X:</p>
                         </div>
@@ -91,7 +91,7 @@
                     </div>
                     <h:inputHidden value="#{hitCheck.timezone}" id="timezone"/>
                     <div class="managing-buttons">
-                        <h:commandButton id="submit" value="Проверить" action="#{hitCheck.saveToTable()}">
+                        <h:commandButton onclick="setTimezone()" id="submit" value="Проверить" action="#{hitCheck.saveToTable()}">
                             <f:ajax execute="r_value y_value x_value timezone"
                                     render="check_table graphicus rerrmsg xerrmsg yerrmsg"/>
                         </h:commandButton>
@@ -108,7 +108,7 @@
                 </h:commandButton>
             </div>
             <div class="info-table">
-                <h:dataTable id="check_table" value="#{table.getAllRows()}" var="hitCheck">
+                <h:dataTable id="check_table" value="#{table.hitChecks}" var="hitCheck">
                     <h:column>
                         <f:facet name="header">X</f:facet>
                         #{hitCheck.x}
