@@ -8,6 +8,7 @@ const circles = {};
 const xRange = range(-5, 4);
 
 function init() {
+    $('[id="form:timezone"]').val(Intl.DateTimeFormat().resolvedOptions().timeZone);
     printBtns(xRange, ".x-buttons", "x-dot", "form:x_value");
     chooseFirstRadius();
     $('.r-size').on("click", btnClick);
@@ -20,12 +21,11 @@ function computeClickCoords() {
     let x = Math.round(event.clientX - target.position().left);
     let y = event.clientY - target.position().top;
     let xValue = ((x - 150) / (100 / r)).toFixed(3);
-    let yValue = ((y - 150) / (-100 / r)).toFixed(3);
+    let yValue = ((y - 150 + $(window).scrollTop()) / (-100 / r)).toFixed(3);
     $('[id="form:x_value"]').val(xValue);
     $('[id="form:y_value"]').val(yValue);
     $('[id="form:submit"]').click();
 }
-
 
 function printBtns(btnsAr, parent, className, targetClass) {
     for (let i = 0; i < btnsAr.length; i++) {
@@ -48,3 +48,4 @@ function chooseFirstRadius() {
     $('[id="' + id + '"]').val(r_button.val());
     r_button.click();
 }
+

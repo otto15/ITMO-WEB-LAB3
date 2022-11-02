@@ -13,14 +13,15 @@ import java.util.Map;
 
 @ManagedBean
 @ApplicationScoped
-public class HitCheckRepositoryImpl implements HitCheckRepository {
+public class HashMapHitCheckRepository implements HitCheckRepository {
 
     private final Map<String, List<HitCheck>> hitChecks = new HashMap<>();
 
     @Override
-    public void save(HitCheck hitCheck) {
+    public boolean save(HitCheck hitCheck) {
         hitChecks.putIfAbsent(getSessionId(), new ArrayList<>());
         hitChecks.get(getSessionId()).add(hitCheck);
+        return true;
     }
 
     @Override

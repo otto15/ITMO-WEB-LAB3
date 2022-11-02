@@ -29,7 +29,7 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>faces/main.xhtml</welcome-file>
+        <welcome-file>main.xhtml</welcome-file>
     </welcome-file-list>
 
     <context-param>

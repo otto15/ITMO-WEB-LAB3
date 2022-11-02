@@ -78,7 +78,8 @@
                                        id="r_value" value="#{hitCheck.r}"/>
                         <div class="buttons r-buttons">
                             <ui:repeat begin="1" end="5" varStatus="iterator">
-                                <h:commandButton styleClass="r-size" value="#{iterator.index + 1}" action="#{table.changeR(iterator.index + 1)}">
+                                <h:commandButton styleClass="r-size" value="#{iterator.index + 1}"
+                                                 action="#{table.changeR(iterator.index + 1)}">
                                     <f:passThroughAttribute name="target" value="form:r_value"/>
                                     <f:ajax execute="r_value" render="graphicus"/>
                                 </h:commandButton>
@@ -88,9 +89,11 @@
                             <h:message for="r_value" id="rerrmsg"/>
                         </div>
                     </div>
+                    <h:inputHidden value="#{hitCheck.timezone}" id="timezone"/>
                     <div class="managing-buttons">
                         <h:commandButton id="submit" value="Проверить" action="#{hitCheck.saveToTable()}">
-                            <f:ajax execute="r_value y_value x_value" render="check_table graphicus rerrmsg xerrmsg yerrmsg"/>
+                            <f:ajax execute="r_value y_value x_value timezone"
+                                    render="check_table graphicus rerrmsg xerrmsg yerrmsg"/>
                         </h:commandButton>
                         <input id="reset" type="reset" value="Сбросить" onclick="clean_input()"/>
                     </div>
@@ -101,7 +104,7 @@
             <div class="clean-button">
                 <h:commandButton type="button" value="Очистить таблицу" action="#{table.clear()}"
                                  onclick="clean_input()">
-                    <f:ajax render="check_table"/>
+                    <f:ajax render="check_table graphicus"/>
                 </h:commandButton>
             </div>
             <div class="info-table">
@@ -123,7 +126,7 @@
 
                     <h:column>
                         <f:facet name="header">Текущее время</f:facet>
-                        <h:outputText value="#{hitCheck.callingDate}">
+                        <h:outputText value="#{hitCheck.getCallingDateWithTimeZone()}">
                             <f:convertDateTime type="zonedDateTime" pattern="yyyy-MM-dd HH:mm:ss"/>
                         </h:outputText>
                     </h:column>

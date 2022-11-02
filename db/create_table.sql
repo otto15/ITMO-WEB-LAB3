@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS s335109.hit_checks (
+    id SERIAL,
+    session_id VARCHAR NOT NULL,
+    x DOUBLE PRECISION NOT NULL,
+    y DOUBLE PRECISION NOT NULL,
+    r DOUBLE PRECISION NOT NULL,
+    calling_date TIMESTAMP WITH TIME ZONE NOT NULL,
+    execution_time BIGINT NOT NULL,
+    hit_status BOOLEAN NOT NULL,
+    timezone VARCHAR NOT NULL,
+    PRIMARY KEY (id)
+);
