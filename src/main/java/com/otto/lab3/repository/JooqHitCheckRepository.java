@@ -1,14 +1,12 @@
 package com.otto.lab3.repository;
 
 import com.otto.lab3.db.DBConnector;
-import com.otto.lab3.jooq.tables.HitChecks;
-import com.otto.lab3.jooq.tables.records.HitChecksRecord;
-import com.otto.lab3.model.HitCheck;
+import com.otto.lab3.service.dto.HitCheckDTO;
+import com.otto.lab3.util.SessionIDGetter;
 import lombok.Data;
 import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.Result;
 import org.jooq.SQLDialect;
+import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 
 import javax.faces.bean.ApplicationScoped;
@@ -18,7 +16,6 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,73 +30,54 @@ public class JooqHitCheckRepository implements HitCheckRepository {
     @ManagedProperty("#{dBConnector}")
     private DBConnector dbConnector;
 
+    @ManagedProperty("#{sessionIDGetter}")
+    private SessionIDGetter sessionIDGetter;
+
     @Override
-    public boolean save(HitCheck hitCheck) {
+    public Integer saveAndReturnId(HitCheckDTO hitCheck) {
         try (Connection connection = dbConnector.getConnection()) {
-            DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
+            DSLContext dsl = DSL.using(connection, SQLDialect.POSTGRES);
+            FacesContext.getCurrentInstance().getExternalContext().log(hitCheck.toString());
+            return dsl.insertInto(HIT_CHECKS)
+                    .set(dsl.newRecord(HIT_CHECKS, hitCheck))
+                    .returning(HIT_CHECKS.ID)
+                    .fetchOptional()
+                    .orElseThrow(() -> new DataAccessException("Error inserting hit check"))
+                    .get(HIT_CHECKS.ID);
 
-            HitChecksRecord hitChecksRecord = context.newRecord(HitChecks.HIT_CHECKS);
-
-            hitChecksRecord.setX(hitCheck.getX());
-            hitChecksRecord.setY(hitCheck.getY());
-            hitChecksRecord.setR(hitCheck.getR());
-            hitChecksRecord.setHitStatus(hitCheck.isInArea());
-            hitChecksRecord.setExecutionTime(hitCheck.getExecutionTime());
-            hitChecksRecord.setCallingDate(hitCheck.getCallingDate().atOffset(ZoneOffset.UTC));
-            hitChecksRecord.setSessionId(getSessionId());
-
-            return hitChecksRecord.store() == 1;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return -1;
     }
 
     @Override
     public void deleteAll() {
         try (Connection connection = dbConnector.getConnection()) {
             DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
-            context.delete(HIT_CHECKS).where(HIT_CHECKS.SESSION_ID.eq(getSessionId())).execute();
+            context.delete(HIT_CHECKS).where(HIT_CHECKS.SESSION_ID.eq(
+                    sessionIDGetter.getSessionId())).execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public List<HitCheck> findAll() {
+    public List<HitCheckDTO> findAll() {
         try (Connection connection = dbConnector.getConnection()) {
             DSLContext context = DSL.using(connection, SQLDialect.POSTGRES);
 
-            Result<Record> result = context.select()
+            return context.select()
                     .from(HIT_CHECKS)
-                    .where(HIT_CHECKS.SESSION_ID.eq(getSessionId()))
-                    .fetch();
+                    .where(HIT_CHECKS.SESSION_ID.eq(
+                            sessionIDGetter.getSessionId()))
+                    .fetch()
+                    .into(HitCheckDTO.class);
 
-            List<HitCheck> hitChecks = new ArrayList<>();
-
-            result.forEach(record -> {
-                HitCheck hitCheck = new HitCheck();
-                hitCheck.setX(record.getValue(HIT_CHECKS.X));
-                hitCheck.setY(record.getValue(HIT_CHECKS.Y));
-                hitCheck.setR(record.getValue(HIT_CHECKS.R));
-                hitCheck.setCallingDate(record.getValue(HIT_CHECKS.CALLING_DATE).toInstant());
-                hitCheck.setExecutionTime(record.getValue(HIT_CHECKS.EXECUTION_TIME));
-                hitCheck.setInArea(record.getValue(HIT_CHECKS.HIT_STATUS));
-
-                hitChecks.add(hitCheck);
-            });
-
-            return hitChecks;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return new ArrayList<>();
     }
 
-    public String getSessionId() {
-
-        FacesContext fCtx = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) fCtx.getExternalContext().getSession(false);
-        return session.getId();
-    }
 }

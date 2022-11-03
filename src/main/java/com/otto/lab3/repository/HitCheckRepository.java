@@ -1,10 +1,11 @@
 package com.otto.lab3.repository;
 
-import com.otto.lab3.model.HitCheck;
+import com.otto.lab3.service.dto.HitCheckDTO;
+
 import java.util.List;
 
 public interface HitCheckRepository {
-    boolean save(HitCheck hitCheck);
+    Integer saveAndReturnId(HitCheckDTO hitCheck);
     void deleteAll();
-    List<HitCheck> findAll();
+    List<HitCheckDTO> findAll();
 }

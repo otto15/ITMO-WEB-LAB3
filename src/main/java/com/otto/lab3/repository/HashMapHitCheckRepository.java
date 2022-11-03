@@ -1,6 +1,6 @@
 package com.otto.lab3.repository;
 
-import com.otto.lab3.model.HitCheck;
+import com.otto.lab3.service.dto.HitCheckDTO;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -15,13 +15,13 @@ import java.util.Map;
 @ApplicationScoped
 public class HashMapHitCheckRepository implements HitCheckRepository {
 
-    private final Map<String, List<HitCheck>> hitChecks = new HashMap<>();
+    private final Map<String, List<HitCheckDTO>> hitChecks = new HashMap<>();
 
     @Override
-    public boolean save(HitCheck hitCheck) {
+    public Integer saveAndReturnId(HitCheckDTO hitCheck) {
         hitChecks.putIfAbsent(getSessionId(), new ArrayList<>());
         hitChecks.get(getSessionId()).add(hitCheck);
-        return true;
+        return 1;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class HashMapHitCheckRepository implements HitCheckRepository {
     }
 
     @Override
-    public List<HitCheck> findAll() {
+    public List<HitCheckDTO> findAll() {
         hitChecks.putIfAbsent(getSessionId(), new ArrayList<>());
         return hitChecks.get(getSessionId());
     }

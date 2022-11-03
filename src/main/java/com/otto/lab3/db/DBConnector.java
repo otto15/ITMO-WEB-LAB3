@@ -3,6 +3,7 @@ package com.otto.lab3.db;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import javax.annotation.PreDestroy;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import java.sql.Connection;
@@ -29,6 +30,11 @@ public class DBConnector {
         config.addDataSourceProperty( "prepStmtCacheSize" , "250" );
         config.addDataSourceProperty( "prepStmtCacheSqlLimit" , "2048" );
         ds = new HikariDataSource( config );
+    }
+
+    @PreDestroy
+    public void closeDS() {
+        ds.close();
     }
 
     public Connection getConnection() throws SQLException {

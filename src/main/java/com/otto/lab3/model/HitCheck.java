@@ -1,7 +1,9 @@
 package com.otto.lab3.model;
 
+import com.otto.lab3.service.dto.HitCheckDTO;
 import com.otto.lab3.repository.HitCheckRepository;
 import com.otto.lab3.service.AreaChecker;
+import com.otto.lab3.service.converter.Converter;
 import lombok.Data;
 
 import javax.faces.bean.ManagedProperty;
@@ -20,6 +22,9 @@ public class HitCheck implements Serializable {
 
     @ManagedProperty("#{areaCheckerImpl}")
     private AreaChecker checker;
+
+    @ManagedProperty("#{hitCheckDTOConverter}")
+    private Converter<HitCheckDTO, HitCheck> converter;
 
     @ManagedProperty("#{table}")
     private Table table;
@@ -40,7 +45,8 @@ public class HitCheck implements Serializable {
         inArea = checker.checkIfInArea(this);
         executionTime = System.currentTimeMillis() - callingDate.toEpochMilli();
         saveTimezone(timezone);
-        if (hitCheckRepository.save(this)) {
+        if (hitCheckRepository.saveAndReturnId(
+                converter.map(this)) > 0) {
             table.getHitChecks().add(this);
         }
     }
