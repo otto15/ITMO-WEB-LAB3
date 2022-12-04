@@ -8,4 +8,6 @@ public interface HitCheckRepository {
     Integer saveAndReturnId(HitCheckDTO hitCheck);
     void deleteAll();
     List<HitCheckDTO> findAll();
+    int getHitChecksTotalCount();
+    List<HitCheckDTO> getLimitedHitChecks(int first, int pageSize);
 }

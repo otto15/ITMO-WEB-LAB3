@@ -13,7 +13,6 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -73,7 +72,35 @@ public class JooqHitCheckRepository implements HitCheckRepository {
                             sessionIDGetter.getSessionId()))
                     .fetch()
                     .into(HitCheckDTO.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
 
+    @Override
+    public int getHitChecksTotalCount() {
+        try (Connection connection = dbConnector.getConnection()) {
+            DSLContext dsl = DSL.using(connection, SQLDialect.POSTGRES);
+            return dsl.fetchCount(HIT_CHECKS, HIT_CHECKS.SESSION_ID.eq(sessionIDGetter.getSessionId()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public List<HitCheckDTO> getLimitedHitChecks(int first, int pageSize) {
+        try (Connection connection = dbConnector.getConnection()) {
+            FacesContext.getCurrentInstance().getExternalContext().log(String.format("set %d %d", first, pageSize));
+            DSLContext dsl = DSL.using(connection, SQLDialect.POSTGRES);
+            return dsl.select().from(HIT_CHECKS)
+                    .where(HIT_CHECKS.SESSION_ID.eq(sessionIDGetter.getSessionId()))
+                    .orderBy(HIT_CHECKS.CALLING_DATE.asc())
+                    .offset(first)
+                    .limit(pageSize)
+                    .fetch()
+                    .into(HitCheckDTO.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }

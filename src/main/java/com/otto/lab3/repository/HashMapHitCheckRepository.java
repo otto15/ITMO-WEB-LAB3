@@ -1,5 +1,6 @@
 package com.otto.lab3.repository;
 
+import com.otto.lab3.model.HitCheck;
 import com.otto.lab3.service.dto.HitCheckDTO;
 
 import javax.faces.bean.ApplicationScoped;
@@ -33,6 +34,16 @@ public class HashMapHitCheckRepository implements HitCheckRepository {
     public List<HitCheckDTO> findAll() {
         hitChecks.putIfAbsent(getSessionId(), new ArrayList<>());
         return hitChecks.get(getSessionId());
+    }
+
+    @Override
+    public int getHitChecksTotalCount() {
+        return 0;
+    }
+
+    @Override
+    public List<HitCheckDTO> getLimitedHitChecks(int first, int pageSize) {
+        return null;
     }
 
     public String getSessionId() {

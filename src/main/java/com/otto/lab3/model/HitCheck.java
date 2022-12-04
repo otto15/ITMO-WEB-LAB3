@@ -26,9 +26,6 @@ public class HitCheck implements Serializable {
     @ManagedProperty("#{hitCheckDTOConverter}")
     private Converter<HitCheckDTO, HitCheck> converter;
 
-    @ManagedProperty("#{table}")
-    private Table table;
-
     @ManagedProperty("#{jooqHitCheckRepository}")
     private HitCheckRepository hitCheckRepository;
 
@@ -45,10 +42,8 @@ public class HitCheck implements Serializable {
         inArea = checker.checkIfInArea(this);
         executionTime = System.currentTimeMillis() - callingDate.toEpochMilli();
         saveTimezone(timezone);
-        if (hitCheckRepository.saveAndReturnId(
-                converter.map(this)) > 0) {
-            table.getHitChecks().add(this);
-        }
+        hitCheckRepository.saveAndReturnId(
+                converter.map(this));
     }
 
     public ZonedDateTime getCallingDateWithTimeZone() {

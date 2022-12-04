@@ -79,7 +79,7 @@
                         <div class="buttons r-buttons">
                             <ui:repeat begin="1" end="5" varStatus="iterator">
                                 <h:commandButton styleClass="r-size" value="#{iterator.index + 1}"
-                                                 action="#{table.changeR(iterator.index + 1)}">
+                                                 actionListener="#{table.changeR(iterator.index + 1)}">
                                     <f:passThroughAttribute name="target" value="form:r_value"/>
                                     <f:ajax execute="r_value" render="graphicus"/>
                                 </h:commandButton>
@@ -91,7 +91,8 @@
                     </div>
                     <h:inputHidden value="#{hitCheck.timezone}" id="timezone"/>
                     <div class="managing-buttons">
-                        <h:commandButton onclick="setTimezone()" id="submit" value="Проверить" action="#{hitCheck.saveToTable()}">
+                        <h:commandButton onclick="setTimezone()" id="submit" value="Проверить"
+                                         action="#{hitCheck.saveToTable()}">
                             <f:ajax execute="r_value y_value x_value timezone"
                                     render="check_table graphicus rerrmsg xerrmsg yerrmsg"/>
                         </h:commandButton>
@@ -108,39 +109,41 @@
                 </h:commandButton>
             </div>
             <div class="info-table">
-                <h:dataTable id="check_table" value="#{table.hitChecks}" var="hitCheck">
-                    <h:column>
+                <p:dataTable id="check_table" value="#{table.model}" var="hitCheck"
+                             paginator="true" rows="#{table.pageSize}" lazy="true"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+                    <p:column>
                         <f:facet name="header">X</f:facet>
                         #{hitCheck.x}
-                    </h:column>
+                    </p:column>
 
-                    <h:column>
+                    <p:column>
                         <f:facet name="header">Y</f:facet>
                         #{hitCheck.y}
-                    </h:column>
+                    </p:column>
 
-                    <h:column>
+                    <p:column>
                         <f:facet name="header">R</f:facet>
                         #{hitCheck.r}
-                    </h:column>
+                    </p:column>
 
-                    <h:column>
+                    <p:column>
                         <f:facet name="header">Текущее время</f:facet>
                         <h:outputText value="#{hitCheck.getCallingDateWithTimeZone()}">
                             <f:convertDateTime type="zonedDateTime" pattern="yyyy-MM-dd HH:mm:ss"/>
                         </h:outputText>
-                    </h:column>
+                    </p:column>
 
-                    <h:column>
+                    <p:column>
                         <f:facet name="header">Время выполнения</f:facet>
                         #{hitCheck.executionTime}
-                    </h:column>
+                    </p:column>
 
-                    <h:column>
+                    <p:column>
                         <f:facet name="header">Результат</f:facet>
                         #{hitCheck.inArea}
-                    </h:column>
-                </h:dataTable>
+                    </p:column>
+                </p:dataTable>
             </div>
         </div>
     </div>
